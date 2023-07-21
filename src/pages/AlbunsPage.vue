@@ -1,49 +1,106 @@
 <template>
-  <div v-if="albuns" class="albuns">
-    <q-card class="albumCard" v-for="album in albuns" :key="album.title">
-      <q-img :src="album.image">
-        <div class="absolute-bottom text-subtitle2 text-center">
-          {{ album.title }}
-        </div>
-      </q-img>
-    </q-card>
+  <div class="albumsPage">
+    <q-form @submit.prevent="searchAlbums">
+      <q-input v-model="searchQuery"
+        input-class="text-left"
+        placeholder="Search"
+        type="search"
+      >
+        <template v-slot:append>
+          <q-icon v-if="searchQuery === ''" name="search" />
+          <q-icon v-else name="clear" class="cursor-pointer" @click="searchQuery = ''" />
+        </template>
+      </q-input>
+    </q-form>
+
+    <div v-if="albums" class="albums">
+      <q-card class="albumCard" v-for="album in albums" :key="album.id">
+        <q-img :src="album.image">
+          <div class="absolute-bottom text-subtitle2 text-center">
+            {{ album.title }}
+          </div>
+        </q-img>
+      </q-card>
+
+      <div class="flex flex-center">
+        <q-pagination
+          v-if="albums"
+          class="center"
+          v-model="currentPage"
+          :max="totalPages"
+          :max-pages="4"
+          :boundary-numbers="false"
+          :ellipses="false"
+          :boundary-links="true"
+          :total-items="totalItems"
+          @input="currentPage = $event"
+        />
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.albumsPage {
+  padding: 16px;
+}
+
+.albums {
+  margin-top: 16px;
+}
+
+.albumCard {
+  margin-bottom: 16px;
+}
+</style>
 
 <script>
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'AlbunsPage',
+  name: 'albumsPage',
   data() {
     return {
-      albuns: null,
+      albums: null,
+      searchQuery: '',
+      currentPage: 1,
+      itemsPerPage: 20,
+      totalPages: null,
     };
   },
   methods: {
-    async loadAlbuns() {
-      const url = 'https://api.discogs.com/database/search?type=master&sort=hot&per_page=100&page=1&token=GrLGSaCUkGbliMTFbVuKgVJpIJkOyYGGkYdVFoav';
+    searchAlbums() {
+      this.currentPage = 1;
+      this.loadAlbums();
+    },
+
+    async loadAlbums() {
+      const url = `https://api.discogs.com/database/search?q=${this.searchQuery}&type=master&per_page=${this.itemsPerPage}&page=${this.currentPage}&token=GrLGSaCUkGbliMTFbVuKgVJpIJkOyYGGkYdVFoav`;
       const response = await fetch(url);
       const data = await response.json();
 
-      this.albuns = data.results.map((album) => ({
+      this.totalPages = data.pagination.pages;
+
+      this.albums = data.results.map((album) => ({
+        id: album.id,
         title: album.title,
         image: album.cover_image,
       }));
+
+      window.scrollTo(0, 0);
     },
   },
-  created() {
-    this.loadAlbuns();
+
+  computed: {
+    totalItems() {
+      return this.albums ? this.albums.length : 0;
+    },
+  },
+
+  watch: {
+    currentPage() {
+      this.loadAlbums();
+    },
   },
 });
 </script>
-
-<style scoped>
-  .albuns {
-    padding: 16px;
-  }
-
-  .albumCard {
-    margin-bottom: 16px;
-  }
-</style>

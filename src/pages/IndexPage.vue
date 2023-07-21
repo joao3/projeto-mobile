@@ -1,5 +1,5 @@
 <template>
-  <q-page class="">
+  <q-page class="home">
     <h1 class="text-center">Trabalho 2</h1>
 
     <p class="text-center">
@@ -25,5 +25,9 @@ export default defineComponent({
 <style scoped>
   ul {
     list-style: none;
+  }
+
+  .home {
+
   }
 </style>

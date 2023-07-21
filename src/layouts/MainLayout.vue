@@ -42,11 +42,24 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated>
-      <p class="text-center text-white">SSC0961 - Desenvolvimento Web e Mobile - 2023.1</p>
+    <q-footer class="bg-primary">
+      <p class="text-white">SSC0961 - 2023.1</p>
     </q-footer>
   </q-layout>
 </template>
+
+<style scoped>
+  footer {
+    display: table;
+    padding: 8px;
+    width: 100%;
+  }
+
+  p {
+    display: table-cell; vertical-align: middle;
+    text-align: center;
+  }
+</style>
 
 <script>
 import { defineComponent, ref } from 'vue';
