@@ -26,8 +26,4 @@ export default defineComponent({
   ul {
     list-style: none;
   }
-
-  .home {
-
-  }
 </style>

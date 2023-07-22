@@ -13,6 +13,13 @@ const routes = [
       { path: '', component: () => import('pages/AlbunsPage.vue') },
     ],
   },
+  {
+    path: '/albuns/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AlbumPage.vue') },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

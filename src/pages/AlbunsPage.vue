@@ -1,5 +1,5 @@
 <template>
-  <div class="albumsPage">
+  <div class="albunsPage">
     <q-form @submit.prevent="searchAlbums">
       <q-input v-model="searchQuery"
         input-class="text-left"
@@ -13,14 +13,16 @@
       </q-input>
     </q-form>
 
-    <div v-if="albums" class="albums">
-      <q-card class="albumCard" v-for="album in albums" :key="album.id">
-        <q-img :src="album.image">
-          <div class="absolute-bottom text-subtitle2 text-center">
-            {{ album.title }}
-          </div>
-        </q-img>
-      </q-card>
+    <div v-if="albums" class="albuns">
+      <router-link v-for="album in albums" :key="album.id" :to="`albuns/${album.id}`">
+        <q-card class="albumCard" >
+          <q-img :src="album.image">
+            <div class="absolute-bottom text-subtitle2 text-center">
+              {{ album.title }}
+            </div>
+          </q-img>
+        </q-card>
+      </router-link>
 
       <div class="flex flex-center">
         <q-pagination
@@ -41,11 +43,11 @@
 </template>
 
 <style scoped>
-.albumsPage {
+.albunsPage {
   padding: 16px;
 }
 
-.albums {
+.albuns {
   margin-top: 16px;
 }
 
@@ -58,7 +60,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'albumsPage',
+  name: 'albunsPage',
   data() {
     return {
       albums: null,
