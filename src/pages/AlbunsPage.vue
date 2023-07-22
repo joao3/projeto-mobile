@@ -102,6 +102,18 @@ export default defineComponent({
 
       window.scrollTo(0, 0);
     },
+
+    saveScrollY() {
+      search.scrollY = window.scrollY;
+    },
+
+    resetScrollY() {
+      window.scrollTo(0, search.scrollY);
+    },
+  },
+
+  beforeRouteLeave() {
+    this.saveScrollY();
   },
 
   async created() {
@@ -109,6 +121,10 @@ export default defineComponent({
     // (quando o usuário clica em um item específico e volta para a busca).
     if (search.query !== '') {
       await this.searchAlbumsState();
+
+      // eslint-disable-next-line no-promise-executor-return
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      this.resetScrollY();
     }
   },
 
