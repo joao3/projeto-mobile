@@ -58,6 +58,9 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { useSearchStore } from 'src/stores/search';
+
+const search = useSearchStore();
 
 export default defineComponent({
   name: 'albunsPage',
@@ -71,8 +74,16 @@ export default defineComponent({
     };
   },
   methods: {
+    // Volta para a busca com a query e número de página do state (quando a página é recarregada).
+    async searchAlbumsState() {
+      this.currentPage = search.page;
+      this.searchQuery = search.query;
+      await this.loadAlbums();
+    },
+
     searchAlbums() {
       this.currentPage = 1;
+      search.query = this.searchQuery;
       this.loadAlbums();
     },
 
@@ -93,6 +104,14 @@ export default defineComponent({
     },
   },
 
+  async created() {
+    // Se o state não está vazio, faz a busca.
+    // (quando o usuário clica em um item específico e volta para a busca).
+    if (search.query !== '') {
+      await this.searchAlbumsState();
+    }
+  },
+
   computed: {
     totalItems() {
       return this.albums ? this.albums.length : 0;
@@ -101,6 +120,7 @@ export default defineComponent({
 
   watch: {
     currentPage() {
+      search.page = this.currentPage;
       this.loadAlbums();
     },
   },

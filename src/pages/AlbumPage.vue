@@ -1,5 +1,6 @@
 <template>
   <div v-if="albumData" class="albumPage">
+
     <q-card class="albumCard no-shadow">
       <img :src="albumData.image">
 

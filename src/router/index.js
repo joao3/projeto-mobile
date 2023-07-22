@@ -18,14 +18,33 @@ export default route((/* { store, ssrContext } */) => {
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
 
+  // eslint-disable-next-line no-unused-vars
+  const scrollBehavior = (to, from, savedPosition) => {
+    const scrollpos = savedPosition
+          || to.meta?.scrollPos
+          || { left: 0, top: 0 };
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(scrollpos);
+      }, 1500); // transition just before 600ms
+    });
+  };
+
   const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior,
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach((to, from, next) => {
+    // eslint-disable-next-line no-unused-expressions
+    from.meta?.scrollTop && (from.meta.scrollTop = window.scrollY);
+
+    return next();
   });
 
   return Router;
