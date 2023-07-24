@@ -30,7 +30,8 @@ export default defineComponent({
   },
   methods: {
     async loadAlbum() {
-      const url = `https://api.discogs.com/masters/${this.$route.params.id}?token=GrLGSaCUkGbliMTFbVuKgVJpIJkOyYGGkYdVFoav`;
+      const apiKey = import.meta.env.VITE_DISCOGS_TOKEN;
+      const url = `https://api.discogs.com/masters/${this.$route.params.id}?token=${apiKey}`;
       const response = await fetch(url);
       const data = await response.json();
 

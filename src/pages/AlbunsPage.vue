@@ -88,7 +88,8 @@ export default defineComponent({
     },
 
     async loadAlbums() {
-      const url = `https://api.discogs.com/database/search?q=${this.searchQuery}&type=master&per_page=${this.itemsPerPage}&page=${this.currentPage}&token=GrLGSaCUkGbliMTFbVuKgVJpIJkOyYGGkYdVFoav`;
+      const apiKey = import.meta.env.VITE_DISCOGS_TOKEN;
+      const url = `https://api.discogs.com/database/search?q=${this.searchQuery}&type=master&per_page=${this.itemsPerPage}&page=${this.currentPage}&token=${apiKey}`;
       const response = await fetch(url);
       const data = await response.json();
 
