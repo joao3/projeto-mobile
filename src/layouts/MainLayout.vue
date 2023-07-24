@@ -76,6 +76,11 @@ const linksList = [
     icon: 'album',
     link: '/albuns',
   },
+  {
+    title: 'Login',
+    icon: 'login',
+    link: '/login',
+  },
 ];
 
 export default defineComponent({
